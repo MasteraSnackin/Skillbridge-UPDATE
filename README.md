@@ -209,5 +209,3 @@ Polygon SkillBridge/
     *   `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID`: Required for WalletConnect v2 integration.
 
 **Security:** Never commit files containing private keys or sensitive API keys (`.env`, `.env.local`) to your Git repository. Use a `.gitignore` file to exclude them.
-
-
