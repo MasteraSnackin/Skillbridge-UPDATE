@@ -211,9 +211,3 @@ Polygon SkillBridge/
 **Security:** Never commit files containing private keys or sensitive API keys (`.env`, `.env.local`) to your Git repository. Use a `.gitignore` file to exclude them.
 
 
-**Starlight:  dApp Discovery tool**
-
-- https://stellarlight.xyz/ecosystem
-- Allows you to search and filter dApps by category such as "Lending & Borrowing"
-
-
