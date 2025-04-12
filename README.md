@@ -1,214 +1,215 @@
-## Offers a decentralised marketplace to help freelancers and clients solve trust, payment delays, and fees with Stellar blockchain and smart contract automation.
+# Polygon SkillBridge
 
+Polygon SkillBridge is a decentralized freelance marketplace platform built on the Polygon blockchain. It connects clients looking for skilled professionals with freelancers seeking work opportunities, leveraging smart contracts for secure user management, job posting, and escrow payments using ERC20 tokens.
 
-Skillbridge is a decentralized freelance marketplace leveraging the Stellar blockchain and Soroban smart contracts to solve key issues in the part-time labor market, such as trust, delayed payments, and high transaction fees. It enables freelancers and clients to interact in a trustless environment where payments are automated and secured by smart contracts.
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+## Features
 
-Image A[Overview](https://1drv.ms/i/s!At64SwKetw4ik8hYvVKHXdYtcSOhxA?e=JHeuLE)
-Image B[Condition](https://1drv.ms/i/s!At64SwKetw4ik8hW39siTSy-rE6VQg?e=7R1Iye)
+**Smart Contracts (Solidity):**
 
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
- 
-Video [Proof of Works](https://youtu.be/c2s0h9VR4OQ)
+*   **User Registry (`UserRegistry.sol`):**
+    *   Manages user registration and profiles.
+    *   Users identified by wallet address.
+    *   Stores profile details off-chain (e.g., IPFS) referenced by a hash.
+    *   Supports user activation/deactivation (by user and admin).
+*   **Job Posting (`JobPosting.sol`):**
+    *   Allows registered clients to post jobs with details (stored off-chain via IPFS hash) and optional deadlines.
+    *   Manages job lifecycle statuses (Open, Assigned, InProgress, Completed, Cancelled, Disputed).
+    *   Assigns freelancers to jobs.
+    *   Requires `UserRegistry` for user verification.
+*   **Escrow (`Escrow.sol`):**
+    *   Handles escrow payments for jobs using specified ERC20 tokens.
+    *   Clients deposit funds after a job is assigned.
+    *   Funds are released to the freelancer upon client approval.
+    *   Supports cancellation and fund return before work completion (in the current basic version).
+    *   Includes an optional platform fee mechanism.
+    *   Requires `UserRegistry` and `JobPosting` for context and verification.
 
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+**Frontend (Next.js):**
 
+*   (Basic structure in place - features to be built out)
+*   Connect Wallet functionality using Wagmi.
+*   Placeholder UI for finding talent/work.
+*   Built with Next.js App Router.
+*   Styled with Tailwind CSS.
+*   Uses TypeScript for type safety.
 
-## Decentralized Freelance Marketplace
-This project is a decentralized platform built on the Stellar blockchain that enables clients and freelancers to engage in trustless freelance contracts. It offers escrowed payments, dispute resolution, and automated smart contract functionality, ensuring secure transactions without intermediaries.
-Features
+## Tech Stack
 
-1. Escrowed Payments
-Secure Payments: Funds from the client are locked into an escrow smart contract until the work is completed.
-Automated Release: Upon completion of milestones or the entire job, the payment is automatically released to the freelancer if conditions are met.
+**Contracts:**
 
-3. Dispute Resolution
-On-Chain Mediation: If there is a disagreement, a third-party mediator or automated process can resolve disputes through the smart contract.
-Funds Recovery: Depending on the resolution, funds are either released to the freelancer or refunded to the client.
+*   **Solidity:** ^0.8.20
+*   **Hardhat:** Development environment, testing, deployment scripting.
+*   **OpenZeppelin Contracts:** For standard implementations like Ownable, ERC20 interfaces.
+*   **TypeChain:** For generating TypeScript types from contracts.
+*   **Ethers.js:** (via Hardhat) For interacting with contracts.
+*   **dotenv:** For managing environment variables (API keys, private keys).
 
-5. Blockchain-Powered
-Stellar Blockchain: All transactions and escrows are managed on Stellar’s decentralized network.
-Soroban SDK: The contract is implemented using the Soroban SDK, which simplifies building decentralized applications on Stellar.
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+**Frontend:**
 
-## Smart Contract Features: Soroban will manage:
+*   **Next.js:** ^15 (React framework with App Router)
+*   **React:** ^19
+*   **TypeScript:** ^5.8
+*   **Wagmi:** React Hooks for Ethereum interaction.
+*   **Viem:** Low-level Ethereum interface library.
+*   **TanStack Query:** Data fetching and state management.
+*   **Tailwind CSS:** Utility-first CSS framework.
+*   **PostCSS & Autoprefixer:** CSS processing.
 
-- Escrow: Payments from clients are locked in a Stellar-based escrow and are only released once the task is completed and approved.
-- Milestone-based payments: Partial payments are automatically released upon completion of agreed milestones.
-- Dispute Resolution: Handling via on-chain mediation and governance models.
-- Soroban SDK and CLI: Use the Soroban SDK to write and test smart contracts. We will also need the Soroban CLI for building and deploying the contracts on Stellar’s test network.
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+## Project Structure
 
-## Freelancer Marketplace Workflow:
-
-- Job Posting: Clients post jobs with defined milestones.
-- Bidding: Freelancers submit bids, and the client selects the winning bid.
-- Escrow Payment: Payment is locked into the smart contract at the beginning.
-- Payment Release: When milestones are approved, payments are released automatically.
-- Freighter Wallet Integration: Freighter wallet integration is necessary to allow users to sign transactions. It will enable users to interact with the platform via their wallet for tasks like deposits and withdrawals.
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-## Instructions for Running the Project Locally
-Prerequisites:
-Rust: Make sure you have Rust installed on your machine. You can install it using:
-
-bash
-Copy code
-```bash
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-Soroban CLI: Install the Soroban CLI to build and deploy smart contracts.
 ```
-bash
-Copy code
-```bash
-cargo install --locked --version 0.9.4 soroban-cli
-Node.js and npm: Ensure that you have Node.js and npm installed. You can check this by running:
-```
-bash
-Copy code
-```bash
-node -v
-npm -v
-```
-If Node.js is not installed, you can install it from here.
-
-Freighter Wallet: Install the Freighter Wallet extension in your browser from here.
-
-Steps for Running the Backend (Rust Smart Contract)
-Navigate to the project directory where the Rust backend resides:
-
-bash
-Copy code
-```bash
-cd decentralized_freelance_marketplace
-Build the smart contract using the Soroban CLI:
-```
-bash
-Copy code
-soroban contract build
-Deploy the smart contract on Stellar's Futurenet (test network). This will require a funded account for the source address.
-
-bash
-Copy code
-```bash
-soroban contract deploy \
-  --wasm target/wasm32-unknown-unknown/release/decentralized_freelance_marketplace.wasm \
-  --source token-admin \
-  --network FUTURENET
-```
-Steps for Running the Frontend (React Application)
-Navigate to the frontend directory:
-
-bash
-Copy code
-```bash
-cd frontend
-Install dependencies for the React application:
-```
-bash
-Copy code
-```bash
-npm install
-Start the React frontend:
-```
-bash
-Copy code
-```bash
-npm start
-```
-Open your browser and navigate to:
-
-arduino
-Copy code
-```bash
-http://localhost:3000
-```
-You should be able to connect your Freighter wallet and interact with the smart contract from the frontend.
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-##Steps for Deployment and Running:
-Backend Setup (Rust & Soroban)
-
-Build the smart contract:
-bash
-Copy code
-```bash
-soroban contract build
-```
-Deploy the smart contract to the testnet:
-bash
-Copy code
-```bash
-soroban contract deploy --wasm target/wasm32-unknown-unknown/release/your_contract.wasm --network FUTURENET
-```
-Frontend Setup (React)
-
-Install dependencies and run the React frontend:
-bash
-Copy code
-```bash
-cd frontend
-npm install
-npm start
-```
-Connect Freighter Wallet
-
-Users can connect their Freighter wallet through the React frontend to sign transactions and interact with the Soroban smart contract.
-Final Notes
-Ensure you have Freighter Wallet installed to test the transaction flow.
-The smart contract handles basic escrow, milestone payments, and dispute resolution.
-You can extend the project by adding more robust payment handling, milestone tracking, and governance models for dispute resolution.
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-Project Structure
-bash
-```bash
-decentralized_freelance_marketplace/
-│
-├── src/
-│   ├── lib.rs                 # Main smart contract code
+Polygon SkillBridge/
+├── contracts/
+│   ├── contracts/          # Solidity smart contracts
+│   │   ├── UserRegistry.sol
+│   │   ├── JobPosting.sol
+│   │   └── Escrow.sol
+│   ├── scripts/            # Deployment scripts (e.g., deploy.ts)
+│   ├── test/               # Hardhat tests (e.g., *.test.ts)
+│   ├── hardhat.config.ts   # Hardhat configuration
+│   ├── package.json
+│   ├── tsconfig.json
+│   └── ...                 # Other Hardhat files (cache, artifacts, typechain-types)
 │
 ├── frontend/
-│   ├── src/
-│   │   ├── components/
-│   │   │   └── ConnectWallet.js   # Freighter integration component (React)
-│   │   └── App.js                 # Main React frontend file
-│   ├── package.json           # React frontend dependencies
-│   └── index.html             # Basic HTML to load the React app
+│   ├── app/                # Next.js App Router pages and layouts
+│   │   ├── page.tsx
+│   │   ├── layout.tsx
+│   │   └── globals.css
+│   ├── components/         # React components (e.g., ConnectWalletButton.tsx)
+│   ├── src/lib/            # Utility functions, configurations (e.g., wagmi.ts)
+│   ├── public/             # Static assets
+│   ├── next.config.mjs     # Next.js configuration
+│   ├── tailwind.config.ts  # Tailwind CSS configuration
+│   ├── postcss.config.js
+│   ├── package.json
+│   ├── tsconfig.json
+│   └── ...
 │
-├── Cargo.toml                 # Rust project configuration
-└── README.md                  # Documentation for the project
+└── README.md               # This file
 ```
 
-Image 1[File Structure](https://1drv.ms/i/s!At64SwKetw4ik8hZtWqQEODpYx6k7Q?e=aBxgZx)
+## Getting Started
 
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+### Prerequisites
 
-## Contributors
-- [Umair Ismati](https://github.com/Rappid-exe)
-- [Anis Bentahar](https://github.com/anistayebM)
-- [Freya Wu](https://github.com/YanniWu88)
+*   Node.js (v18 or later recommended)
+*   npm or yarn
+*   Git
 
-Contributions are welcome! Please open an issue or submit a pull request for any improvements or bug fixes.
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-## License
+### Setup - Contracts
 
-This project is licensed under the MIT License.
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-UPDATE Need to rebuild the frontend and change storage type to Persistent data storage
+1.  **Clone the repository:**
+    ```bash
+    git clone <repository-url>
+    cd Polygon-SkillBridge/contracts
+    ```
+2.  **Install dependencies:**
+    ```bash
+    npm install
+    # or
+    yarn install
+    ```
+3.  **Create Environment File:**
+    *   Copy `.env.example` (if provided) to `.env`.
+    *   Fill in the required environment variables:
+        *   `MUMBAI_RPC_URL`: RPC endpoint URL for Polygon Mumbai testnet.
+        *   `PRIVATE_KEY`: Private key of the account you want to use for deployment (DO NOT commit this file).
+        *   `POLYGONSCAN_API_KEY`: (Optional) Your Polygonscan API key for contract verification.
+    ```env
+    MUMBAI_RPC_URL="https://your_mumbai_rpc_url"
+    PRIVATE_KEY="0xyour_private_key"
+    POLYGONSCAN_API_KEY="your_polygonscan_api_key"
+    ```
 
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-## Acknowledgments 
-- **Soroswap:** DEX
-    - https://github.com/soroswap
-    - https://soroswap.finance/
-- **Aquarius:** Liquidity Management
-    - https://aqua.network/
-    - https://github.com/AquaToken
-- **Phoenix: DEX**
-    - https://www.phoenix-hub.io/
-    - https://github.com/Phoenix-Protocol-Group
-- **Blend: Lending**
-    - https://docs.blend.capital/
-    - https://github.com/blend-capital
+### Setup - Frontend
+
+1.  **Navigate to the frontend directory:**
+    ```bash
+    cd ../frontend
+    # (Assuming you are in the contracts directory)
+    # Or from the root: cd Polygon-SkillBridge/frontend
+    ```
+2.  **Install dependencies:**
+    ```bash
+    npm install
+    # or
+    yarn install
+    ```
+3.  **Create Environment File:**
+    *   The frontend might require environment variables, especially for WalletConnect. Create a `.env.local` file in the `frontend` directory.
+    *   Add necessary variables like `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID`. Get a Project ID from [WalletConnect Cloud](https://cloud.walletconnect.com/).
+    ```env
+    # frontend/.env.local
+    NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID="your_walletconnect_project_id"
+    ```
+
+## Usage
+
+### Running the Frontend Development Server
+
+1.  Navigate to the `frontend` directory:
+    ```bash
+    cd Polygon-SkillBridge/frontend
+    ```
+2.  Start the development server:
+    ```bash
+    npm run dev
+    # or
+    yarn dev
+    ```
+3.  Open your browser and go to `http://localhost:3000`.
+
+### Compiling Contracts
+
+1.  Navigate to the `contracts` directory:
+    ```bash
+    cd Polygon-SkillBridge/contracts
+    ```
+2.  Compile the smart contracts:
+    ```bash
+    npx hardhat compile
+    ```
+    This will generate artifacts and TypeChain typings.
+
+## Testing
+
+1.  Navigate to the `contracts` directory:
+    ```bash
+    cd Polygon-SkillBridge/contracts
+    ```
+2.  Run the Hardhat tests:
+    ```bash
+    npx hardhat test
+    ```
+    (Ensure test files exist in the `test/` directory).
+
+## Deployment
+
+1.  Navigate to the `contracts` directory:
+    ```bash
+    cd Polygon-SkillBridge/contracts
+    ```
+2.  Ensure your `.env` file is configured correctly with `MUMBAI_RPC_URL` and `PRIVATE_KEY`.
+3.  Run the deployment script (assuming a script like `scripts/deploy.ts` exists and is configured):
+    ```bash
+    npx hardhat run scripts/deploy.ts --network mumbai
+    ```
+4.  (Optional) Verify the contracts on Polygonscan if `POLYGONSCAN_API_KEY` is set in `.env` and the verification logic is added to the deployment script or run separately using `hardhat-etherscan`.
+
+**Note:** The deployment script (`deploy.ts`) needs to handle the deployment order and linking of contracts (e.g., passing the `UserRegistry` address to `JobPosting` and `Escrow` constructors).
+
+## Environment Variables
+
+*   **Contracts (`contracts/.env`):**
+    *   `MUMBAI_RPC_URL`: JSON-RPC endpoint for the target network.
+    *   `PRIVATE_KEY`: Deployer wallet private key.
+    *   `POLYGONSCAN_API_KEY`: (Optional) For contract verification.
+*   **Frontend (`frontend/.env.local`):**
+    *   `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID`: Required for WalletConnect v2 integration.
+
+**Security:** Never commit files containing private keys or sensitive API keys (`.env`, `.env.local`) to your Git repository. Use a `.gitignore` file to exclude them.
+
 
 **Starlight:  dApp Discovery tool**
 
